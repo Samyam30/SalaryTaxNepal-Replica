@@ -15,19 +15,261 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+input:hover{
+    color: #111;
+    background: white;
+    box-shadow: 0 0 2px rgb(47, 245, 255);
+}
+.box2,.box3,.box4{
+  font-weight: bold;
+  margin-left: 15%;
+  height: 80px;
+  min-width: 600px ;
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  border-style: solid;
+  border-width: 1px;
+  border-color:#b6d5fe;
+  background-color:  #d5e7ff;
+  padding: 20px;
+  margin-left: 25%;
+  margin-right: 25%;
+  gap: 20%;
+}
+.box3{
+  margin-top: 20px;
+  width: 700px;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  gap:20%
+}
+p{
+  border-bottom:1px solid black;  
+}
+input{
+  text-align: right;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.box4{
+  border: white;
+  background-color: white;
+  gap:71%;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 700px;
+}
+button{
+  border: 1px solid #337ab7;
+  background-color: #337ab7;
+  border-radius: 3px;
+  height: auto;
+  width: auto;
+  min-width: 100px;
+  padding: 3px;
+  font-weight: 400;
+  color: white;
+}
+#calcualtebutton{
+  border: 1px solid #4cae4c;
+  background-color: #4cae4c;
+  color: white;
+}
+.info{
+  border-color: white;
+  margin-left: 25%;
+  margin-right: 25%;
+  margin-top: 30px;
+}
+.foothead{
+  display: flex;
+  flex-direction: row;
+  background-color: #337ab7;
+  margin-top: 10px;
+  border: none;
+  height: 60px;
+  margin-bottom: none;
+  margin-bottom: fill;
+  position: relative;
+  color: white;
+  padding-left: 30px;
+  padding-top: 20px;
+  gap: 20%;
+}
+.logoi{
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  padding-left: 10px;
+  text-align: right;
+  gap: 0px;
+}
+.heee{
+  margin-top: 5px;
+}
+.hili{
+  margin-left: 20px;
+
+}
+.hili:hover{
+  text-decoration: underline;
+}
+.footer{
+  flex: 1 ;
+}
+.header-info{
+  font-weight: bold;
+  text-align: center;
+  margin-left: auto;
+  font-size: 30px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+.interactive-flow{
+  height: 55px;
+  background-color: #337ab7;
+  margin-left: 25%;
+  margin-right: 25%;
+  min-width: 600px;
+  width: 700px;
+}
+.dialog-content{
+  overflow-y: auto;
+  height: 700px;
+  width: 1000px;
+  background-color: white;
+  border: 2px solid black;
+  color: black;
+}
+.dialog{
+  overflow-y: scroll;
+  overflow-x: scroll;
+}
+.dbox1{
+  display: flex;
+  flex-direction: column;
+  gap: 2px; 
+  border: 1px solid #d5e7ff;
+  background-color: #b6d5fe;
+  color: black;
+  margin-top: 20px;
+  font-size: 12px;
+}
+.dbox1-1{
+  border-bottom: 1px solid #d5e7ff;
+  display: flex;
+  flex-direction: row;
+  
+}
+.dinput{
+  margin-right: 20px;
+  text-align: right;
+  flex: 3;
+  color: #111;
+}
+.giff{
+  height: 80px;
+}
+.mail{
+  color: #337ab7;
+}
+.mail:hover{
+  text-decoration: underline;
+}
+.box3{
+  gap: 20px;
+}
+.box3-1,.box3-2{
+  flex: 1;
+}
+.bonus{
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+}
+.fx-1{
+  flex: 1;
+}
+.box2{
+  gap: 100px;
+  width: 700px;
+}
+.dbox2{
+  border: 1px solid #d5e7ff;
+  background-color: #b6d5fe;
+  color: black;
+  margin-top: 20px;
+}
+.dialog{
+  overflow-y: auto;
+
+}
+.headings,th,td{
+  text-align: center;
+  padding-left: 30px;
+  gap:20%;
+}
+.finalRow{  
+  font-weight: bold;
+  color: white;
+  background-color: #6794d1;
+  width: 100%;
+  padding: 20px;
+  margin-left: 40px;
+}
+.hhh{
+  gap: 80%;
+  background-color: #6794d1;
+}
+td
+{
+  gap: 40%;
+  margin-left: 30px;
+  border-bottom: 1px solid white;
+}
+.finn{
+  font-weight: bold;
+  color: #111;
+}
+.dialogdiv{
+  margin-top: 0px;
+  margin-left: 0px;
+  margin-right: 40px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid grey;
+  padding-right: 30px;
+
+}
+#monthly,#yearly{
+  flex: 1;
+  border: 1px solid white;
+}
+#monthly:hover,#yearly:hover{
+  box-shadow: 0 0 0px rgb(255, 255, 255);
+}
+.he{
+  text-align: center;
+  font-size: 30px;
+}
+.printme{
+  background-color: #4cae4c;
+  color: white;
+  height: 30px;
+  width: 70px;
+  border-radius: 3px;
+  border-color: #4cae4c;
+}
+.clos{
+  background-color: red;
+  width: 70px;
+  height: 30px;
+  border-radius: 3px;
+  border-color: red;
+}
+.headings{
+  background-color: #25518c;
+  color: white;
 }

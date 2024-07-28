@@ -1,113 +1,403 @@
-import Image from "next/image";
+"use client"
+import Header from "../components/Header/app";
+import Footer from "@/components/Footer/app";
+import React,{memo, useMemo} from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Trigger } from "@radix-ui/react-dialog";
 
 export default function Home() {
+  const [rows,setRows]=useState([]);
+  const [rate,setRate]=useState('1');
+  const [tax,setTax]=useState('0');
+  const [flag,setFlag]=useState(false);
+  const router=useRouter();
+  const [open,setOpen]=useState(false);
+
+  const [formData,setFormData]=useState({
+    natureOfEmployee:'',
+    fiscalYear:'',
+    monthlySalary:0,
+    numberOfMonths:0,
+    bonus:0,
+    totalSalary:0,
+    socialSecurityFund:0,
+    employeeProvidentFund:0,
+    citizenInvestmentTrust:0,
+    insurance:0
+  })
+  function resetData(event){
+    event.preventDefault();
+    setFormData({
+      natureOfEmployee:'',
+      fiscalYear:'',
+      monthlySalary:0,
+      numberOfMonths:0,
+      bonus:0,
+      totalSalary:0,
+      socialSecurityFund:0,
+      employeeProvidentFund:0,
+      citizenInvestmentTrust:0,
+      insurance:0
+    })
+    setRows([]);
+      monthlySalary.value=null;
+      numberOfMonths.value=null;
+      bonus.value=null;
+      totalSalary.value=null;
+      socialSecurityFund.value=null;
+      employeeProvidentFund.value=null;
+      citizenInvestmentTrust.value=null;
+      insurance.value=null;
+    console.log("reseting");
+  }
+  function setData(event){
+  
+    const {name,value}=event.target;
+    setFormData((prevData)=>({
+      ...prevData,
+      [name]:value
+    }))
+
+  }
+  const [finalData,setFinalData]=useState({
+    TI:0,
+    SSF:0,
+    INS:0,
+    TD:0,
+    NA:0,
+    AI:0,
+    TL:0,
+    NTLm:0,
+    NTLy:0
+  })
+  function finalCalculation(){
+    const ti=formData.totalSalary;
+    const ssf=parseInt(formData.citizenInvestmentTrust)+parseInt (formData.employeeProvidentFund)+parseInt(formData.socialSecurityFund);
+    const ins=formData.insurance;
+    const td=parseInt(ssf)+parseInt(formData.insurance);
+    const na=parseInt(ti)-parseInt(td);
+    const ai=na;
+    // const tl=0;
+    // const ntlm=0;
+    // const ntly=0;
+    setFinalData((prev)=>({
+      ...prev,
+    TI:ti,
+    SSF:ssf,
+    INS:ins,
+    TD:td,
+    NA:na,
+    AI:ai,
+    // TL:tl,
+    // NTLm:ntlm,
+    // NTLy:ntly
+    }))
+    // setTimeout(()=>{taxCalc()});
+  }
+  function calculateData(event){
+    event.preventDefault();
+    if(!formData.totalSalary){
+      alert("Total salary must not be empty");
+    }
+    else{
+
+        finalCalculation();
+        setTimeout(()=>{taxCalc()},100);
+        setOpen(true);
+    }
+
+  }
+  // console.log(formData);
+  
+  function totalSalaryCalculation(){
+    const monthlySalary=parseInt(formData.monthlySalary);
+    const noOfMonths=parseInt(formData.numberOfMonths);
+    const bonus=parseInt(formData.bonus);
+    const total=parseInt(monthlySalary*noOfMonths+bonus);
+        setFormData((prevData)=>({
+        ...prevData,
+        totalSalary:total
+      }))
+      totalSalary.value=total;
+
+  }
+
+var inter=parseInt(0);
+var ai=parseInt(finalData.AI);
+  function taxCalc(){
+      var tax1=parseInt(0);
+    if(ai>500000){
+      inter=ai-500000;
+      tax1+=0.01*500000;
+      setRows((prev)=>([...prev,{
+        amounto:500000,
+        rateo:0.01,
+        taxo:5000
+      }]))
+      if(inter>200000){
+        inter=inter-200000;
+        tax1+=0.1*200000;
+        setRows((prev)=>([...prev,{
+          amounto:200000,
+          rateo:0.1,
+          taxo:20000
+        }]))
+
+        if(inter>300000){
+          inter=inter-300000;
+          tax1+=0.2*300000;
+          setRows((prev)=>([...prev,{
+            amounto:300000,
+            rateo:0.2,
+            taxo:60000
+          }]))
+          if(inter>1000000){
+            inter=inter-1000000;
+            tax1+=0.3*1000000;
+            setRows((prev)=>([...prev,{
+              amounto:1000000,
+              rateo:0.3,
+              taxo:300000
+            }]))
+            if(inter>500000){
+              tax1+=0.5*inter;
+              setRows((prev)=>([...prev,{
+                amounto:inter,
+                rateo:0.5,
+                taxo:0.5*inter
+              }]))
+            }else{
+              tax1+=0.36*inter;
+              setRows((prev)=>([...prev,{
+                amounto:inter,
+                rateo:0.36,
+                taxo:0.36*inter
+              }]))
+            }
+          }else{
+            tax1+=0.3*inter;
+            setRows((prev)=>([...prev,{
+              amounto:inter,
+              rateo:0.3,
+              taxo:0.3*inter
+            }]))
+          }
+        }
+        else{
+          tax1+=0.2*inter;
+          setRows((prev)=>([...prev,{
+            amounto:inter,
+            rateo:0.2,
+            taxo:0.2*inter
+          }]))
+        }
+      }else{
+        tax1+=0.1*inter;
+        setRows((prev)=>([...prev,{
+          amounto:inter,
+          rateo:0.1,
+          taxo:0.1*inter
+        }]))
+      }
+    }else{
+ 
+      tax1+=0.01*ai;
+      setRows((prev)=>([...prev,{
+        amounto:ai,
+        rateo:0.01,
+        taxo:0.01*ai
+      }]))  
+
+    }
+    setTax(tax1)
+    
+  }
+  console.log(rows.length);
+  function hello(event){
+    event.preventDefault();
+    window.print();
+  }
+  // useEffect(()=>{ 
+  //   setTimeout(()=>{taxCalc()},100);
+  
+  // },[formData.AI]);
+  function closing(){
+    setRows([]);
+  }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+    <Header />
+    <div className="box1">
+      <form className="form1">
+      <div className="box2">
+        <div className="fx-1">
+        <label>Nature of Employee: </label>
+        <select id="natureOfEmployee"  name="natureOfEmployee" onChange={setData}>
+          <option value="unmarried">Unmarried</option>
+          <option value="married">Married</option>
+        </select>
+        </div>
+        <div className="fx-1">
+        <label>Fiscal Year: </label>
+        <input type="date" onChange={setData} name="noOfMonths" id="noOfMonths"></input>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className="box3">
+        <div className="box3-1">
+          <p>Annual income</p>
+          <label>Monthly Salary</label><br></br>
+          <input type="number" id="monthlySalary" name="monthlySalary" 
+            onChange={setData}
+          ></input><br></br>
+          <label>Number of Months</label><br></br>
+          <input type="number" id="numberOfMonths" name="numberOfMonths" placeholder="12" onChange={setData}></input><br></br>
+          <div className="bonus">
+          <label>Bonus</label><br></br>
+          <input type="number" id="bonus" name="bonus" onChange={setData}  onMouseOut={totalSalaryCalculation}></input><br></br>
+          </div>
+          <label >Total Salary</label><br></br>
+          <input type="number" id="totalSalary" name="totalSalary" placeholder="0" onClick={totalSalaryCalculation}></input><br></br>
+        </div>
+        <div className="box3-2">
+        <p>Annual Deduction</p>
+          <label>Social Security Fund</label><br></br>
+          <input type="number" id="socialSecurityFund" name="socialSecurityFund" placeholder="0" onChange={setData}></input><br></br>
+          <label>Employees Provident Fund</label><br></br>
+          <input type="number" id="employeeProvidentFund" name="employeeProvidentFund" placeholder="0" onChange={setData}></input><br></br>
+          <label>Citizen Investment Trust</label><br></br>
+          <input type="number" id="citizenInvestmentTrust" name="citizenInvestmentTrust" placeholder="0" onChange={setData}></input><br></br>
+          <label>Insurance</label><br></br>
+          <input type="number" id="insurance" name="insurance" placeholder="0" onChange={setData}></input><br></br>
+        </div>
       </div>
+      <div className="box4">
+      <button id="resetbutton" onClick={resetData}>Reset value</button>
+      <Dialog className="dialog" open={open} onOpenChange={setOpen}> 
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+      <DialogTrigger asChild >
+      <button id="calcualtebutton"
+ variant="outline" onClick={calculateData}>calculate</button>
+        </DialogTrigger>
+  
+  <DialogContent className="dialog-content">
+    <DialogHeader>
+      <DialogTitle className="he">Net Tax Liability</DialogTitle>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      </DialogHeader>
+      <DialogDescription>
+      <div className="dialogdiv">
+      <div type="text" id="monthly" name="monthly" value={(parseFloat(tax)/12).toFixed(3)}>Rs. {(parseFloat(tax)/12).toFixed(3)} (Monthly)</div>
+      <div type="text" id="yearly" name="yearly" value={parseFloat(tax)}>Rs. {tax} (Yearly)</div>
+      <br></br>
       </div>
-    </main>
-  );
+        <div className="dbox1">
+          <div className="dbox1-1"><div>Total income (Ti): </div>
+            <div className="dinput" id="Ti" name="Ti" value={finalData.TI}> Rs. {finalData.TI}</div>
+          </div>
+          <div className="dbox1-1">
+            <div>Sum of SSF, EPF and CIT (SSF+EPF+CIT): </div>
+            <div className="dinput" id="ssf" name="ssf">Rs. {finalData.SSF}</div>
+          </div>
+          <div className="dbox1-1">
+          <div>Insurance: </div>
+          <div className="dinput" id="ins" name="ins">Rs. {finalData.INS}</div>
+          </div>
+          <div className="dbox1-1">
+          <div>Total Deduction (TD): </div>
+          <div className="dinput" id="TD" name="TD">Rs. {finalData.TD}</div>
+          </div>
+          <div className="dbox1-1">
+          <div>Net Assessable (TI-TD): </div>
+          <div className="dinput" id="NA" name="Na">Rs. {finalData.NA}</div>
+          </div>
+        </div>
+        <div className="dbox2">
+          <table id="dialogTable"> 
+            <thead>
+            <tr className="headings">
+              <th>
+                Assesible Income (Rs.)  
+              </th>
+              <th>Rate(%)</th>
+              <th>Tax Liability(Rs.)</th>
+            </tr>
+            </thead>
+            <tbody>
+              {rows.map((item)=>(
+                <tr>
+                  <td>
+                    {item.amounto}
+                  </td>
+                  <td>
+                    {item.rateo}
+                  </td>
+                  <td>
+                    {item.taxo}
+                  </td>
+                </tr>
+              ))}
+              <tr className="finalRow">
+                <td className="hhh">
+                  {finalData.AI}
+                </td>
+                <td className="hhh">
+                  {tax}
+                </td>
+                <td></td>
+
+              </tr>
+              <tr className="finn">
+                <td>Net tax Liability(Monthly): </td>
+                <td>
+                  Rs. {(parseFloat(tax)/12).toFixed(3)}
+                </td>
+                <td></td>
+              </tr>
+              <tr  className="finn">
+              <td>Net tax Liability(Yearly): </td>
+                <td>
+                  Rs. {tax}
+                </td>
+              </tr>
+            </tbody>
+            
+          </table>
+        </div>
+      </DialogDescription>
+      <DialogFooter>
+    <button class="printme" onClick={hello}>Print</button>
+    <DialogClose asChild>
+      <button className="clos"onClick={
+        closing
+      }>close</button>
+    </DialogClose>
+  </DialogFooter>
+  </DialogContent>
+  
+</Dialog>
+      </div>
+      </form>
+    </div>
+    <div>
+      <p className="info">
+      Salary tax calculator is designed for calculating tax payable to Nepal government on the salary earned in a given year. The calculation is based on Nepal Government Tax Policy.
+        <br></br>
+      If you have any feedback and suggestion, please write to <span className="mail" onClick={()=>{router.push("mailto:info@eattendance.com")}}>info@eattendance.com</span> or call 9851190654.
+      </p>
+    </div>
+    <Footer />
+</>
+      );
 }
